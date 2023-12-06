@@ -1,21 +1,33 @@
 import React, { useState, useEffect } from 'react';
+import Loaders from './Loaders';
 
 function App() {
-  // localStorage.setItem('counter', 0)
-  const [counter, setCounter] = useState(() => 
-    !parseInt(localStorage.getItem('counter')) ? 0 : 
-    parseInt(localStorage.getItem('counter'))
-  );
+  const [users, setUsers] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  function delay() {
+
+  }
+
 
   useEffect(() => {
-    localStorage.setItem('counter', counter)
-  }, [counter]);
+    setIsLoading(true)
+    fetch('https://jsonplaceholder.typicode.com/users')
+    
+      .then(response => response.json())
+    
+      .then(data => {
+        setUsers(data)
+        setIsLoading(false)
+      });
+    
 
+  }, []);
   return (
-    <div>
-      {counter} <br />
-      <button onClick={() => setCounter(counter + 1)}>Добавить 1</button>
-    </div>
+    <>
+    {isLoading ?  (<Loaders/>) : ""}
+      {JSON.stringify(users)}
+    </>
   )
 }
 
