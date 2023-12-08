@@ -5,6 +5,7 @@ import
 from 'react';
 import Loader from './Loader';
 import { getTasks } from './Api/tasks';
+import { getNormilizedToDos } from './utils/get-normilize-todos';
 /* 
   CRUD операции 
   C create 
@@ -30,11 +31,28 @@ const mockToDos = [
     completed: false
     }
 ]
+_______________________________
+const ids = [1, 2];
+const mockToDos Right = [
+  1: {
+    userId: 1,
+    id: 1,
+    title: "delectus aut autem",
+    completed: false
+    },
+  2: {
+    userId: 1,
+    id: 2,
+    title: "delectus aut autem",
+    completed: false
+    }
+]
 */
 
 function App() {
   // States
-  const [tasks, setTasks] = useState(null);
+  const [tasksIds, setTasksIds] = useState(null);
+  const [tasksByIds, setTasksByIds] = useState({});
   const [isToDosLoading, setIsToDosLoading] = useState(false);
   const [isLoadingError, setIsLoadingError] = useState(false);
   
@@ -45,9 +63,12 @@ function App() {
     // Получение списка задач
     getTasks()
       .then(todos => {
+        const [ids, byIds] = getNormilizedToDos(todos)
+        setTasksIds(ids);
+        setTasksByIds(byIds);
         setIsToDosLoading(false);
-        setTasks(todos);
       })
+
       .catch(() => {
         setIsLoadingError(true);
         setIsToDosLoading(false);
@@ -61,9 +82,9 @@ function App() {
       {isToDosLoading && <Loader/>}
       {isLoadingError && "Ошибка загрузки данных"}
       {/* TASK LIST */}
-      {tasks && tasks.map(task => (
-          <li key={task.id}>
-            <p>{task.title}</p>
+      {tasksIds && tasksIds.map(id => (
+          <li key={id}>
+            <p>{tasksByIds[id].title}</p>
           </li>
         ))}
     </div>
