@@ -4,50 +4,10 @@ import
   useEffect } 
 from 'react';
 import Loader from './Loader';
-import { getTasks } from './Api/tasks';
+import Task from './components/Task/Task';
+import { getTasks, deleteTask } from './Api/tasks';
 import { getNormilizedToDos } from './utils/get-normilize-todos';
-/* 
-  CRUD операции 
-  C create 
-  R reade
-  U update
-  D delete 
 
-  Являются показателем к польнофункциональному приложению
-*/
-// https://jsonplaceholder.typicode.com/todos - сайт списка из 200 задач
-/* 
-const mockToDos = [
-  {
-    userId: 1,
-    id: 1,
-    title: "delectus aut autem",
-    completed: false
-    },
-  {
-    userId: 1,
-    id: 2,
-    title: "delectus aut autem",
-    completed: false
-    }
-]
-_______________________________
-const ids = [1, 2];
-const mockToDos Right = [
-  1: {
-    userId: 1,
-    id: 1,
-    title: "delectus aut autem",
-    completed: false
-    },
-  2: {
-    userId: 1,
-    id: 2,
-    title: "delectus aut autem",
-    completed: false
-    }
-]
-*/
 
 function App() {
   // States
@@ -58,23 +18,31 @@ function App() {
   
   // Fetch
   useEffect(() => {
-    setIsToDosLoading(false);
+    setIsLoadingError(false);
+    setIsToDosLoading(true);
 
     // Получение списка задач
     getTasks()
       .then(todos => {
-        const [ids, byIds] = getNormilizedToDos(todos)
+        const [ids, byIds] = getNormilizedToDos(todos);
         setTasksIds(ids);
         setTasksByIds(byIds);
         setIsToDosLoading(false);
       })
-
       .catch(() => {
         setIsLoadingError(true);
         setIsToDosLoading(false);
       });
   }, []);
 
+  // Functions
+  function handleTaskDeleteBtnClick(taskId) {
+   setTasksIds(tasksIds.filter((id) => id !== taskId));
+   deleteTask(taskId)
+  }
+  function handleTeskCheckboxClick(e) {
+    
+  }
   // Render
   return(
     <div>
@@ -83,9 +51,10 @@ function App() {
       {isLoadingError && "Ошибка загрузки данных"}
       {/* TASK LIST */}
       {tasksIds && tasksIds.map(id => (
-          <li key={id}>
-            <p>{tasksByIds[id].title}</p>
-          </li>
+        <Task
+          key={id}
+          task={tasksByIds[id].title}
+          onDeleteBtnClick={() => handleTaskDeleteBtnClick(id)}/>
         ))}
     </div>
   )
