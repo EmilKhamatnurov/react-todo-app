@@ -40,8 +40,13 @@ function App() {
    setTasksIds(tasksIds.filter((id) => id !== taskId));
    deleteTask(taskId)
   }
-  function handleTeskCheckboxClick(e) {
-    
+
+  function handleTaskCheckboxClick(e, id) {
+    const isChecked = e.target.checked;
+    console.log(e.target.checked);
+    setTasksByIds(
+      
+    )
   }
   // Render
   return(
@@ -54,7 +59,8 @@ function App() {
         <Task
           key={id}
           task={tasksByIds[id].title}
-          onDeleteBtnClick={() => handleTaskDeleteBtnClick(id)}/>
+          onDeleteBtnClick={() => handleTaskDeleteBtnClick(id)}
+          onCheckboxClick={(e, id) => handleTaskCheckboxClick(e, id)}/>
         ))}
     </div>
   )
