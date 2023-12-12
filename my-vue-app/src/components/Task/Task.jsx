@@ -1,11 +1,11 @@
 import React from 'react';
 
-function Task({task, onDeleteBtnClick, onCheckboxClick}) {
+function Task({task, onDelete, onToggle}) {
     return (
         <li>
-            <input type="checkbox" onChange={onCheckboxClick}/>
-            <p>{task}</p>
-            <button onClick={onDeleteBtnClick}>Удалить задачу</button>
+            <input type="checkbox" onChange={onToggle} checked={task.completed}/>
+            <p>{task.title}</p>
+            <button onClick={onDelete}>Удалить задачу</button>
         </li>
     );
 }
